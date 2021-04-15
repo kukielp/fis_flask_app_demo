@@ -6,8 +6,28 @@ import psycopg2
 
 app = Flask(__name__)
 
+def get_conn():
+    conn = None
+    try:
+        creds = json.loads(get_secret())
+    except (Exception, psycopg2.DatabaseError) as error:
+        # usefull for local testing
+        creds = {
+            'host' : '127.0.0.1',
+            'username' : 'postgres',
+            'password' : ''
+        }
+    finally:
+        conn = psycopg2.connect(
+            host=creds['host'],
+            database="postgres",
+            user=creds['username'],
+            password=creds['password']
+        )
+    return conn
+
 def get_secret():
-    secret_name = "flasksecreaat"
+    secret_name = "flasksecret"
     region_name = "ap-southeast-1"
 
     session = boto3.session.Session()
@@ -123,26 +143,6 @@ def get_vendors():
         if conn is not None:
             conn.close()
     return res
-
-def get_conn():
-    conn = None
-    try:
-        creds = json.loads(get_secret())
-    except (Exception, psycopg2.DatabaseError) as error:
-        # usefull for local testing
-        creds = {
-            'host' : '127.0.0.1',
-            'username' : 'postgres',
-            'password' : ''
-        }
-    finally:
-        conn = psycopg2.connect(
-            host=creds['host'],
-            database="postgres",
-            user=creds['username'],
-            password=creds['password']
-        )
-    return conn
 
 @app.route('/')
 def hello_world():
