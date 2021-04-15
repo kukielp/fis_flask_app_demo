@@ -7,7 +7,7 @@ import psycopg2
 app = Flask(__name__)
 
 def get_secret():
-    secret_name = "flasksecret"
+    secret_name = "flasksecreaat"
     region_name = "ap-southeast-1"
 
     session = boto3.session.Session()
@@ -40,7 +40,7 @@ def get_secret():
             text_secret_data = get_secret_value_response['SecretBinary']
         return text_secret_data
 
-def create_tables(conn):
+def create_tables():
     """ create tables in the PostgreSQL database"""
     commands = (
         """
@@ -78,6 +78,7 @@ def create_tables(conn):
         )
         """)
     try:
+        conn = get_conn()
         cur = conn.cursor()
         # create table one by one
         for command in commands:
@@ -88,21 +89,29 @@ def create_tables(conn):
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-def insert_vendor(vendor, conn):
+    finally:
+        if conn is not None:
+            conn.close()
+def insert_vendor(vendor):
     try:
+        conn = get_conn()
         cur = conn.cursor()
         cur.execute("INSERT INTO vendors(vendor_name) VALUES(%s) RETURNING vendor_id;", (vendor,))
         vendor_id = cur.fetchone()[0]
         conn.commit()
+        cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
-        return json.dumps(vendor_id)
+        if conn is not None:
+            conn.close()
+    return json.dumps(vendor_id)
 
-def get_vendors(conn):
+def get_vendors():
     """ query data from the vendors table """
     res = None
     try:
+        conn = get_conn()
         cur = conn.cursor()
         cur.execute("SELECT vendor_id, vendor_name FROM vendors ORDER BY vendor_name")
         print("The number of parts: ", cur.rowcount)
@@ -110,6 +119,9 @@ def get_vendors(conn):
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
+    finally:
+        if conn is not None:
+            conn.close()
     return res
 
 def get_conn():
@@ -132,9 +144,6 @@ def get_conn():
         )
     return conn
 
-#Start the main part of the app
-connection = get_conn()
-
 @app.route('/')
 def hello_world():
   return 'Hello world from Flask!'
@@ -143,24 +152,24 @@ def hello_world():
 def addItem():
     if request.method == 'POST':
         content = request.get_json(silent=True)
-        vendor_id = insert_vendor(content['vendor_name'],connection)
+        vendor_id = insert_vendor(content['vendor_name'])
         return json.dumps(vendor_id)
     else:
         return 'Use POST'
 
 @app.route('/select')
 def select():
-  return json.dumps(get_vendors(connection))
+  return json.dumps(get_vendors())
 
 @app.route('/load')
 def load():
-  create_tables(connection)
-  insert_vendor('AKM Semiconductor Inc.',connection)
-  insert_vendor('Asahi Glass Co Ltd.',connection)
-  insert_vendor('Daikin Industries Ltd.',connection)
-  insert_vendor('Dynacast International Inc.',connection)
-  insert_vendor('Foster Electric Co. Ltd.',connection)
-  insert_vendor('Murata Manufacturing Co. Ltd.',connection)
+  create_tables()
+  insert_vendor('AKM Semiconductor Inc.')
+  insert_vendor('Asahi Glass Co Ltd.')
+  insert_vendor('Daikin Industries Ltd.')
+  insert_vendor('Dynacast International Inc.')
+  insert_vendor('Foster Electric Co. Ltd.')
+  insert_vendor('Murata Manufacturing Co. Ltd.')
   return 'Data is loaded'
 if __name__ == '__main__':
   app.run()
