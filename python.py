@@ -88,9 +88,6 @@ def create_tables(conn):
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-    finally:
-        if conn is not None:
-            conn.close()
 def insert_vendor(vendor, conn):
     try:
         cur = conn.cursor()
@@ -113,9 +110,6 @@ def get_vendors(conn):
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-    finally:
-        if conn is not None:
-            conn.close()
     return res
 
 def get_conn():
