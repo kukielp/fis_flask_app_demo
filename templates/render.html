@@ -14,9 +14,18 @@
           const r = new XMLHttpRequest();
             r.open("GET", `/select_data`, true);
             r.onload = function () {
+                let view_data
+                try {
+                    view_data = JSON.parse(r.responseText)
+                }
+                catch(err) {
+                    console.log(err)
+                    view_data = {"message":"Major Application Error"}
+                }
+
                 let node = new PrettyJSON.view.Node({
                     el:$('#output-object'),
-                    data:JSON.parse(r.responseText)
+                    data: view_data
                 });
                 node.expandAll();
             };
