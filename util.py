@@ -6,6 +6,7 @@ from botocore.exceptions import ClientError
 
 def get_secret():
     secret_name = "flasksecret"
+    region_name = "ap-southeast-1"
 
     session = boto3.session.Session()
     client = session.client(
@@ -41,7 +42,7 @@ def get_conn():
     try:
         creds = json.loads(get_secret())
     except (Exception, psycopg2.DatabaseError) as error:
-        # useful for local testing
+        # usefull for local testing
         creds = {
             'host' : '127.0.0.1',
             'username' : 'postgres',
