@@ -5,8 +5,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js" integrity="sha512-9EgQDzuYx8wJBppM4hcxK8iXc5a1rFLp/Chug4kIcSWRDEgjMiClF8Y3Ja9/0t8RDDg19IfY5rs6zaPS9eaEBw==" crossorigin="anonymous"></script>
     <script src="https://warfares.github.io/pretty-json/pretty-json-min.js"></script>
     <script>
+        let timer;
         go_gets = function(){
-            const r = new XMLHttpRequest();
+            timer = setInterval(run_get, 2000);
+        }
+
+        function run_get() {
+          const r = new XMLHttpRequest();
             r.open("GET", `/select_data`, true);
             r.onload = function () {
                 let node = new PrettyJSON.view.Node({
@@ -16,6 +21,9 @@
                 node.expandAll();
             };
             r.send();
+        }
+        function abort_timer() { // to be called when you want to stop the timer
+          clearInterval(timer);
         }
     </script>
     <style>
@@ -49,6 +57,7 @@
   <div class="">
       <a href="/select_data/">Select Example</a> page.
         <button onClick="go_gets()">Run</button>
+        <br/><button onClick="abort_timer()">Stop</button>
   </div>
 </div>
 <div class="split right">
