@@ -1,0 +1,62 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.12.1/underscore-min.js" integrity="sha512-MlLC+OTHLccQVYJj0oRc7LL9MBaC7EnFpVAPuru/G6Nirwsj9MVsrw+GOrkJDRQEa6/0TutTcoik9VRa53DySw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js" integrity="sha512-9EgQDzuYx8wJBppM4hcxK8iXc5a1rFLp/Chug4kIcSWRDEgjMiClF8Y3Ja9/0t8RDDg19IfY5rs6zaPS9eaEBw==" crossorigin="anonymous"></script>
+    <script src="https://warfares.github.io/pretty-json/pretty-json-min.js"></script>
+    <script>
+        go_gets = function(){
+            const r = new XMLHttpRequest();
+            r.open("GET", `/select_data`, true);
+            r.onload = function () {
+                let node = new PrettyJSON.view.Node({
+                    el:$('#output-object'),
+                    data:JSON.parse(r.responseText)
+                });
+                node.expandAll();
+            };
+            r.send();
+        }
+    </script>
+    <style>
+        body {
+            padding: 3rem;
+            font-size: 16px;
+        }
+        /* Split the screen in half */
+        .split {
+            height: 100%;
+            width: 50%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+        /* Control the left side */
+        .left {
+            left: 0;
+        }
+        /* Control the right side */
+        .right {
+            right: 0;
+        }
+</style>
+</head>
+<body>
+
+<div class="split left">
+  <div class="">
+      <a href="/select_data/">Select Example</a> page.
+        <button onClick="go_gets()">Run</button>
+  </div>
+</div>
+<div class="split right">
+  <div class="">
+    <h1>Output</h1>
+    <pre name="" id="output-object"></pre>
+  </div>
+</div>
+
+</body>
+</html>
