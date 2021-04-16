@@ -1,13 +1,35 @@
 import psycopg2
 import json
 import boto3
+import os
+import requests
 
 from botocore.exceptions import ClientError
 
+def detect_running_region():
+    """Dynamically determine the region from a running Glue job (or anything on EC2 for
+    that matter)."""
+    easy_checks = [
+        # check if set through ENV vars
+        os.environ.get('AWS_REGION'),
+        os.environ.get('AWS_DEFAULT_REGION'),
+        # else check if set in config or in boto already
+        boto3.DEFAULT_SESSION.region_name if boto3.DEFAULT_SESSION else None,
+        boto3.Session().region_name,
+    ]
+    for region in easy_checks:
+        if region:
+            return region
+
+    # else query an external service
+    # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-identity-documents.html
+    r = requests.get("http://169.254.169.254/latest/dynamic/instance-identity/document")
+    response_json = r.json()
+    return response_json.get('region')
+
 def get_secret():
     secret_name = "flasksecret"
-    region_name = "ap-southeast-1"
-
+    region_name = detect_running_region()
     session = boto3.session.Session()
     client = session.client(
         service_name='secretsmanager',
