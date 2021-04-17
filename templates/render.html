@@ -5,9 +5,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js" integrity="sha512-9EgQDzuYx8wJBppM4hcxK8iXc5a1rFLp/Chug4kIcSWRDEgjMiClF8Y3Ja9/0t8RDDg19IfY5rs6zaPS9eaEBw==" crossorigin="anonymous"></script>
     <script src="https://warfares.github.io/pretty-json/pretty-json-min.js"></script>
     <script>
+        loader = function(){
+            let c = document.getElementById("myCanvas");
+            let ctx = c.getContext("2d");
+
+            // Bounding box
+            ctx.beginPath();
+            ctx.lineWidth = "6";
+            ctx.strokeStyle = "orange";
+            ctx.rect(5, 5, 290, 110);
+            ctx.stroke();
+        }
+
         let timer;
         go_gets = function(){
             timer = setInterval(run_get, 2000);
+            timer = setInterval(run_get_500, 2000);
         }
 
         function run_get() {
@@ -17,10 +30,12 @@
                 let view_data
                 try {
                     view_data = JSON.parse(r.responseText)
+                    updateGraph(200)
                 }
                 catch(err) {
                     console.log(err)
                     view_data = {"message":"Major Application Error"}
+                    updateGraph(500)
                 }
 
                 let node = new PrettyJSON.view.Node({
@@ -31,8 +46,55 @@
             };
             r.send();
         }
+
+        function run_get_500() {
+          const r = new XMLHttpRequest();
+            r.open("GET", `/select_data_500`, true);
+            r.onload = function () {
+                let view_data
+                view_data = JSON.parse(r.responseText)
+                let node = new PrettyJSON.view.Node({
+                    el:$('#output-object-bad'),
+                    data: view_data
+                });
+                node.expandAll();
+            };
+            r.send();
+        }
+
         function abort_timer() { // to be called when you want to stop the timer
           clearInterval(timer);
+        }
+
+        let loopcount = 0;
+        blocks = [
+              {x:230,y:30,w:50,h:50, color:"white"},
+              {x:180,y:30,w:50,h:50, color:"white"},
+              {x:130,y:30,w:50,h:50, color:"white"},
+              {x:80,y:30,w:50,h:50, color:"white"},
+              {x:30,y:30,w:50,h:50, color:"white"},
+            ];
+
+        function updateGraph(result){
+          let c = document.getElementById("myCanvas");
+          let ctx = c.getContext("2d");
+          let color;
+          if(result === 200){
+            color = "green";
+          }else{
+            color = "red"
+          }
+
+          blocks[4].color = blocks[3].color;
+          blocks[3].color = blocks[2].color;
+          blocks[2].color = blocks[1].color;
+          blocks[1].color = blocks[0].color;
+          blocks[0].color = color;
+
+          for(let i=0;i<5;i++){
+            ctx.fillStyle = blocks[i].color;
+            ctx.fillRect(blocks[i].x, blocks[i].y, blocks[i].w, blocks[i].h);
+          }
         }
     </script>
     <style>
@@ -60,20 +122,27 @@
         }
 </style>
 </head>
-<body>
+<body onload="loader()">
 
 <div class="split left">
   <div class="">
       <a href="/select_data/">Select Example</a> page.
         <button onClick="go_gets()">Run</button>
-        <br/><button onClick="abort_timer()">Stop</button>
+        <button onClick="abort_timer()">Stop</button>
+          <br/>
+          <canvas id="myCanvas" width="300" height="120" style="border:1px solid #d3d3d3;">
+            Your browser does not support the HTML5 canvas tag.
+        </canvas>
   </div>
 </div>
 <div class="split right">
-  <div class="">
-    <h1>Output</h1>
-    <pre name="" id="output-object"></pre>
-  </div>
+    <div class="">
+        <h1>Output</h1>
+        Server side Try Catch
+        <pre style="display: inline-block; border:2px solid Black; name="" id="output-object"></pre><br/>
+        No try/catch ( confused user )
+        <pre style="display: inline-block; border:2px solid Black; name="" id="output-object-bad"></pre>
+    </div>
 </div>
 
 </body>

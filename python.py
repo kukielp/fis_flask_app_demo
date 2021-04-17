@@ -12,6 +12,17 @@ def select():
     return json.dumps(get_vendors())
 
 
+@app.route('/select_data_500')
+def select_500():
+    return json.dumps(get_vendors_500())
+
+
+
+@app.route('/get_500')
+def get_500():
+    return get_500_response()
+
+
 @app.route('/render', methods=["GET"])
 def render_sample():
     return render_template('render.html')
@@ -39,8 +50,6 @@ def load():
     insert_vendor('Asahi Glass Co Ltd.')
     insert_vendor('Daikin Industries Ltd.')
     insert_vendor('Dynacast International Inc.')
-    insert_vendor('Foster Electric Co. Ltd.')
-    insert_vendor('Murata Manufacturing Co. Ltd.')
     return 'Data is loaded'
 
 
