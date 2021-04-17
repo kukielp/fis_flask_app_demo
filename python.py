@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 from load_data import *
-from util import *
 from get_methods import *
 from post_methods import *
 
@@ -15,7 +14,6 @@ def select():
 @app.route('/select_data_500')
 def select_500():
     return json.dumps(get_vendors_500())
-
 
 
 @app.route('/get_500')
@@ -50,11 +48,11 @@ def load():
     insert_vendor('Asahi Glass Co Ltd.')
     insert_vendor('Daikin Industries Ltd.')
     insert_vendor('Dynacast International Inc.')
+    # presume it worked ;)
     return 'Data is loaded'
 
 
 if __name__ == '__main__':
     app.run()
 
-
- # env LDFLAGS='-L/usr/local/lib -L/usr/local/opt/openssl/lib -L/usr/local/opt/readline/lib' pip install -r requirements.txt 
+# env LDFLAGS='-L/usr/local/lib -L/usr/local/opt/openssl/lib -L/usr/local/opt/readline/lib' pip install -r requirements.txt

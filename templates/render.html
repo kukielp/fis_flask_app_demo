@@ -17,10 +17,15 @@
             ctx.stroke();
         }
 
-        let timer;
+        let timer_one, timer_two;
+
         go_gets = function(){
-            timer = setInterval(run_get, 2000);
-            timer = setInterval(run_get_500, 2000);
+            timer_one = setInterval(run_get, 2000);
+            timer_two = setInterval(run_get_500, 2000);
+        }
+        function abort_timer() {
+          clearInterval(timer_two);
+          clearInterval(timer_one);
         }
 
         function run_get() {
@@ -62,10 +67,6 @@
             r.send();
         }
 
-        function abort_timer() { // to be called when you want to stop the timer
-          clearInterval(timer);
-        }
-
         let blocks = [
               {x:230,y:30,w:50,h:50, color:"white"},
               {x:180,y:30,w:50,h:50, color:"white"},
@@ -73,7 +74,6 @@
               {x:80,y:30,w:50,h:50, color:"white"},
               {x:30,y:30,w:50,h:50, color:"white"},
             ];
-        let count = 0;
         let size_big = true;
         function updateGraph(result){
           let c = document.getElementById("myCanvas");
@@ -101,11 +101,12 @@
               blocks[0].h = 50;
           }
           size_big = !size_big;
-          // reset all boxes.
+          // reset all boxes ( ie just draw what over the top )
           for(let i=0;i<5;i++){
             ctx.fillStyle = "white";
             ctx.fillRect(blocks[i].x, 30, 50, 50);
           }
+          // draw all boxes
           for(let i=0;i<5;i++){
             ctx.fillStyle = blocks[i].color;
             console.log(blocks[i].h)
@@ -142,7 +143,7 @@
 
 <div class="split left">
   <div class="">
-      <a href="/select_data/">Select Example</a> page.
+      <a href="/select_data">Select Example</a> page.
         <button onClick="go_gets()">Run</button>
         <button onClick="abort_timer()">Stop</button>
           <br/>
