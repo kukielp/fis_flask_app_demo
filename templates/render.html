@@ -66,15 +66,15 @@
           clearInterval(timer);
         }
 
-        let loopcount = 0;
-        blocks = [
+        let blocks = [
               {x:230,y:30,w:50,h:50, color:"white"},
               {x:180,y:30,w:50,h:50, color:"white"},
-              {x:130,y:30,w:50,h:50, color:"white"},
+              {x:130,y:30,w:50,h:30, color:"white"},
               {x:80,y:30,w:50,h:50, color:"white"},
               {x:30,y:30,w:50,h:50, color:"white"},
             ];
-
+        let count = 0;
+        let size_big = true;
         function updateGraph(result){
           let c = document.getElementById("myCanvas");
           let ctx = c.getContext("2d");
@@ -86,13 +86,29 @@
           }
 
           blocks[4].color = blocks[3].color;
+          blocks[4].h = blocks[3].h;
           blocks[3].color = blocks[2].color;
+          blocks[3].h = blocks[2].h;
           blocks[2].color = blocks[1].color;
+          blocks[2].h = blocks[1].h;
           blocks[1].color = blocks[0].color;
+          blocks[1].h = blocks[0].h;
           blocks[0].color = color;
 
+          if(size_big) {
+              blocks[0].h = 30;
+          }else{
+              blocks[0].h = 50;
+          }
+          size_big = !size_big;
+          // reset all boxes.
+          for(let i=0;i<5;i++){
+            ctx.fillStyle = "white";
+            ctx.fillRect(blocks[i].x, 30, 50, 50);
+          }
           for(let i=0;i<5;i++){
             ctx.fillStyle = blocks[i].color;
+            console.log(blocks[i].h)
             ctx.fillRect(blocks[i].x, blocks[i].y, blocks[i].w, blocks[i].h);
           }
         }
