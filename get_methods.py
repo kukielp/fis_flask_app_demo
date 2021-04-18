@@ -1,4 +1,5 @@
 import psycopg2
+from random import randrange
 from util import get_conn
 from flask import Response
 
@@ -8,7 +9,7 @@ def get_vendors():
     try:
         conn = get_conn()
         cur = conn.cursor()
-        cur.execute("SELECT vendor_id, vendor_name FROM vendors ORDER BY vendor_name")
+        cur.execute("SELECT vendor_id, vendor_name FROM vendors ORDER BY vendor_name limit " + str(randrange(12)+1) )
         print("The number of parts: ", cur.rowcount)
         res = cur.fetchall()
         cur.close()
@@ -24,7 +25,7 @@ def get_vendors_500():
     res = None
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("SELECT vendor_id, vendor_name FROM vendors ORDER BY vendor_name")
+    cur.execute("SELECT vendor_id, vendor_name FROM vendors ORDER BY vendor_name limit " + str(randrange(12)+1) )
     print("The number of parts: ", cur.rowcount)
     res = cur.fetchall()
     cur.close()

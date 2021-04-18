@@ -48,6 +48,14 @@ def load():
     insert_vendor('Asahi Glass Co Ltd.')
     insert_vendor('Daikin Industries Ltd.')
     insert_vendor('Dynacast International Inc.')
+    insert_vendor('Other Company Local Inc.')
+    insert_vendor('Technology Organisation Inc.')
+    insert_vendor('Food International Inc.')
+    insert_vendor('Delivery Fast! Inc.')
+    insert_vendor('Silicon Chips International Inc.')
+    insert_vendor('Engine Parts Global Inc.')
+    insert_vendor('Photography Imaging Inc.')
+    insert_vendor('Machine Learning Products International Inc.')
     # presume it worked ;)
     return 'Data is loaded'
 
