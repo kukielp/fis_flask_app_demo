@@ -1,0 +1,74 @@
+body {
+    font-family: "Noto Sans";
+    font-size: 12px;
+    color: #1a1a1a;
+    margin: 0;
+}
+h1 {
+    font-family: monospace;
+    font-weight: 1000;
+    font-size: 26px;
+    color: whitesmoke;
+    margin: 0;
+}
+h2 {
+    font-weight: 600;
+    font-size: 16px;
+}
+.titlebar {
+    background-color: #232f3e;
+    text-align: center;
+    padding-top: 10;
+    padding-bottom: 10;
+}
+.settingspanel {
+    padding-bottom: 4;
+    height: 24px;
+    width: 300px;
+}
+#settingsleft {
+    text-align: left;
+    float: left;
+    padding: 4;
+}
+#settingsright {
+    text-align: right;
+    
+    float: right;
+}
+.outputpanel {
+    padding: 4;
+}
+/* Split the screen in half */
+.split {
+    height: 95%;
+    width: 45%;
+    position: fixed;
+    z-index: 1;
+    top: 60;
+    overflow-x: hidden;
+}
+/* Control the left side */
+.left {
+    left: 0;
+    padding-left: 20;
+    padding-top: 20;
+}
+/* Control the right side */
+.right {
+    right: 0;
+}
+
+/* No columns on narrow view */
+@media only screen and (max-width: 700px) {
+    .split {
+        height: 95%;
+        width: 100%;
+    }
+    
+    .right {
+        left: 0;
+        padding-left: 20;
+        top: 220;
+    }
+}
