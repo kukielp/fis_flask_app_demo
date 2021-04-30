@@ -1,5 +1,7 @@
 <html>
 <head>
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='aws-ui.css') }}"></link> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}"></link>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.12.1/underscore-min.js" integrity="sha512-MlLC+OTHLccQVYJj0oRc7LL9MBaC7EnFpVAPuru/G6Nirwsj9MVsrw+GOrkJDRQEa6/0TutTcoik9VRa53DySw==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js" integrity="sha512-9EgQDzuYx8wJBppM4hcxK8iXc5a1rFLp/Chug4kIcSWRDEgjMiClF8Y3Ja9/0t8RDDg19IfY5rs6zaPS9eaEBw==" crossorigin="anonymous"></script>
@@ -12,7 +14,7 @@
             // Bounding box
             ctx.beginPath();
             ctx.lineWidth = "6";
-            ctx.strokeStyle = "orange";
+            ctx.strokeStyle = "#f8991d";
             ctx.rect(5, 5, 290, 110);
             ctx.stroke();
         }
@@ -114,47 +116,31 @@
           }
         }
     </script>
-    <style>
-        body {
-            padding: 3rem;
-            font-size: 16px;
-        }
-        /* Split the screen in half */
-        .split {
-            height: 100%;
-            width: 50%;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            overflow-x: hidden;
-            padding-top: 20px;
-        }
-        /* Control the left side */
-        .left {
-            left: 0;
-        }
-        /* Control the right side */
-        .right {
-            right: 0;
-        }
-</style>
 </head>
 <body onload="loader()">
 
-<div class="split left">
-  <div class="">
-      <a href="/select_data">Select Example</a> page.
-        <button onClick="go_gets()">Run</button>
-        <button onClick="abort_timer()">Stop</button>
-          <br/>
-          <canvas id="myCanvas" width="300" height="120" style="border:1px solid #d3d3d3;">
-            Your browser does not support the HTML5 canvas tag.
-        </canvas>
-  </div>
+<div class="titlebar">
+  <h1>🔥🔥🔥 MEGA STABLE APP 🔥🔥🔥</h1>
 </div>
+
+<div class="split left">
+  <div class="settingspanel">
+    <div id="settingsleft">
+      <a href="/select_data">SELECT EXAMPLE</a>
+    </div>
+    <div id="settingsright">
+      <button onClick="go_gets()">Run</button>
+      <button onClick="abort_timer()">Stop</button>
+    </div>
+  </div>
+  <canvas id="myCanvas" width="300" height="120" style="border:1px solid #d3d3d3;">
+    Your browser does not support the HTML5 canvas tag.
+  </canvas>
+</div>
+
 <div class="split right">
-    <div class="">
-        <h1>Output</h1>
+    <div class="outputpanel">
+        <h2>Output</h2>
         Server side Try Catch<br/>
         <pre style="display: inline-block; border:2px solid Black; name="" id="output-object"></pre><br/>
         No try/catch ( confused user )<br/>
